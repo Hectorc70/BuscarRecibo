@@ -3,9 +3,10 @@ import os.path as path
 
 
 
+
 def crear_archivo_txt(datos_pdf, ruta_archivo = "metadatos.txt"):
 	
-	datos 		 = datos_pdf
+	datos = datos_pdf
 	
 	if path.exists(ruta_archivo):
 		leer_archivo_txt()

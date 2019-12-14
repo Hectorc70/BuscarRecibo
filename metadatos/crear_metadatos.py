@@ -1,33 +1,40 @@
+
+
 import PyPDF2
+import re
 
-from ayuda.archivo_datos import crear_archivo_txt
+from metadatos.ayuda.archivo_datos import crear_archivo_txt
+from metadatos.ayuda.rutas import Rutas
 
 
 
-class Archivo_Pdf:
+class Archivo_Pdf(Rutas):
 
-	def __init__(self):
-		self.nombre = "201916.pdf"
-		self.ruta   = None
+	def __init__(self, buscar):
+		
+		self.ruta   = buscar
+
+		Rutas.__init__(self, self.ruta)
 
 	def leer_pdf(self):
 
-		lectura = PyPDF2.PdfFileReader(self.nombre,'rb')
+		for archivo in self.rutas_pdf:
 
-		if lectura.isEncrypted:
+			lectura = PyPDF2.PdfFileReader(archivo,'rb')
 
-			lectura.decrypt('')
-			pagina = lectura.getPage(0)
-			pdftext = pagina.extractText()
-			print(pdftext)
+			if lectura.isEncrypted:
 
-		else:
-			pagina = lectura.getPage(0)
-			pdftext = pagina.extractText()
-			print(pdftext)
-			crear_archivo_txt(pdftext)							#llena un txt de los datos del pdf
+				lectura.decrypt('')
+				pagina = lectura.getPage(0)
+				pdftext = pagina.extractText()
+				print(pdftext)
 
-	def buscar
+			else:
+				pagina = lectura.getPage(0)
+				pdftext = pagina.extractText()
+				print(pdftext)
+				crear_archivo_txt(pdftext)							#llena un txt de los datos del pdf
 
-a= Archivo_Pdf()
-a.leer_pdf()
+	def buscar_datos(self):
+
+
