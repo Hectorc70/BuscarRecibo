@@ -1,7 +1,7 @@
 
 
 import PyPDF2
-import re
+
 
 from metadatos.ayuda.archivo_datos import crear_archivo_txt
 from metadatos.ayuda.rutas import Rutas
@@ -32,9 +32,16 @@ class Archivo_Pdf(Rutas):
 			else:
 				pagina = lectura.getPage(0)
 				pdftext = pagina.extractText()
+
+				buscar_datos(pdftext)
+				
 				print(pdftext)
+
+
 				crear_archivo_txt(pdftext)							#llena un txt de los datos del pdf
 
-	def buscar_datos(self):
+	def buscar_datos(self, texto):
+		pass
+		
 
-
+	
