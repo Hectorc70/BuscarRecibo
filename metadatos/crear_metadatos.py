@@ -49,6 +49,7 @@ class Archivo_Pdf(Rutas):
 			patron = 'CONTROL: [0123456789]{8}'
 			buscador = Buscador(patron, contenido)
 			posiciones = buscador.buscar()			#llama la funcion que devuelve la poscion del texto
+			
 
 	
 
