@@ -9,14 +9,20 @@ class Buscador:
         self.palabra =  caracter_buscado
         self.texto = texto 
 
-        self.buscar()
+        
     
     
-    def buscar(self):
+    def buscar(self):  
+        """Busca la cadena y retorna sus posiciones"""  
+        self.posiciones = list()
 
         buscador = re.search(self.palabra, self.texto)
-
+        
         if buscador:
-            print("Se ha encontrado la palabra:", self.palabra)
+            
+            print("Se ha encontrado la palabra:")
+            self.posiciones.append(buscador.span())            
         else:
             print("No se ha encontrado la palabra:", self.palabra)
+    
+        return self.posiciones
