@@ -2,24 +2,33 @@ import os.path as path
 
 
 
+class ArchivoTxt:
 
+	def __init__(self, texto, archivo = "metadatos.txt"):
+		self.texto 		  = texto
+		self.ruta_archivo = archivo
+		self.crear_archivo_txt()	
 
-def crear_archivo_txt(datos_pdf, ruta_archivo = "metadatos.txt"):
-	
-	datos = datos_pdf
-	
-	if path.exists(ruta_archivo):
-		leer_archivo_txt()
-	else:
-		escribir_archivo_txt(datos, ruta_archivo)
+	def crear_archivo_txt(self):
+				
+		
+		if path.exists(self.ruta_archivo):
+			self.leer_archivo_txt(self.texto, self.ruta_archivo)
+		else:
+			self.escribir_archivo_txt(self.texto, self.ruta_archivo)
 		
 
-def leer_archivo_txt():
-	print("leyendo")
+	def leer_archivo_txt(self, datos, nombre ):
+		
+		archivo_r = open(nombre, "a")
+		archivo_r.write('\n' + datos)
+		
+		archivo_r.close() 
+		print("leido y escrita la INFO")
 
-def escribir_archivo_txt(datos, nombre):
+	def escribir_archivo_txt(self, datos, nombre):
 
-	archivo_r = open(nombre, "w")
-	archivo_r.write(datos)
-	archivo_r.close() 
-	print("archivo creado")
+		archivo_r = open(nombre, "w")
+		archivo_r.write(datos)
+		archivo_r.close() 
+		print("archivo creado")

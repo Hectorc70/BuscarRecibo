@@ -6,6 +6,6 @@ from metadatos.crear_metadatos import Archivo_Pdf
 
 def ejecutar(ruta):
     pdf = Archivo_Pdf(ruta)
-    pdf.crear_metadatos()
+    pdf.extraer_no_control()
 
 ejecutar(askdirectory())
