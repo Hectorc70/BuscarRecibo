@@ -42,32 +42,32 @@ class Archivo_Pdf(Rutas):
 	
 	
 	def extraer_no_control(self):
-		"""busca datos y los almacena en un txt"""
+		"""busca el Numero de control y lo
+		   extrae del pdf"""
 
 		self.leer_pdf()
+		datos_pdf_extract = list()
+		
 		for contenido in self.contenido:
 
-			#periodo = self.extraer_periodo(contenido)
-
+			periodo = self.extraer_periodo(contenido)
 			print(contenido)
 			patron 			= 'CONTROL: [0123456789]{8}'
 			buscador 		= Buscador(patron, contenido)
 			posiciones 		= buscador.buscar()			 			
-			control = self.extraer_texto(posiciones[0], posiciones[1], contenido) 
+			texto = self.extraer_texto(posiciones[0], posiciones[1], contenido) 
 
-			texto = control
+			datos_pdf_extract = texto + "|"+ periodo
 
-			ArchivoTxt(texto)
+			ArchivoTxt(datos_pdf_extract)
 
 	def extraer_periodo(self, contenido):
-
-		for conte in contenido:
 			
-			print(conte)
-			patron 			= 'PERIODO:01/2019'
-			buscador 		= Buscador(patron, conte)
-			posiciones 		= buscador.buscar()			 			
-			texto = self.extraer_texto(posiciones[0], posiciones[1], conte) 
+		print(contenido)
+		patron 			= 'PERIODO:[0123456789]{2}/[0123456789]{4}'
+		buscador 		= Buscador(patron, contenido)
+		posiciones 		= buscador.buscar()			 			
+		texto = self.extraer_texto(posiciones[0], posiciones[1], contenido) 
 			
 		return texto
 	

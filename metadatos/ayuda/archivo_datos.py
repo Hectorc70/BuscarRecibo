@@ -20,11 +20,20 @@ class ArchivoTxt:
 
 	def leer_archivo_txt(self, datos, nombre ):
 		
-		archivo_r = open(nombre, "a")
-		archivo_r.write('\n' + datos)
+		archivo_r = open(nombre, "r")
+		datos_txt = archivo_r.readlines()
 		
+		for dato in datos_txt:			
+			if dato.split('|')[0] == datos.split('|')[0]:
+				print("los datos ya existen")
+			
+			else:
+				archivo_r = open(nombre, "w")
+				archivo_r.write(datos)
+				print("leido y escrita la INFO")
+
 		archivo_r.close() 
-		print("leido y escrita la INFO")
+		
 
 	def escribir_archivo_txt(self, datos, nombre):
 
