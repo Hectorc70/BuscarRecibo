@@ -22,24 +22,25 @@ class Archivo_Pdf(Rutas):
 		"""Lee archivo pdf y extrae su contenido"""
 
 
-		self.contenido = list()
+		self.contenido_pag = dict()
+		self.ruta_templeado = dict()
 		for archivo in self.rutas_pdf:
+
+			tipo_empleado = self.tipo_de_empleado(archivo)		
+			self.lectura = PyPDF2.PdfFileReader(archivo,'rb')
+			paginas = self.lectura.numPages
 			
-			lectura = PyPDF2.PdfFileReader(archivo,'rb')
+			for pagina in range(paginas):
+				if self.lectura.isEncrypted:
+					self.lectura_encriptada(self.lectura, pagina)				
 
-			if lectura.isEncrypted:
-
-				lectura.decrypt('')
-				pagina = lectura.getPage(0)
-				pdftext = pagina.extractText()
-				self.contenido.append(pdftext)
-
-			else:
-				pagina = lectura.getPage(0)
-				pdftext = pagina.extractText()	
-				self.contenido.append(pdftext)
-	
-	
+				else:
+					pagina_lect = self.lectura.getPage(pagina)
+					pdftext = pagina_lect.extractText()	
+					pag = pagina+1
+					self.contenido_pag[pdftext] = [tipo_empleado, pag, archivo]	#Almacena el contenido y la pagina
+				
+				
 	
 	def extraer_no_control(self):
 		"""busca el Numero de control y lo
@@ -48,18 +49,21 @@ class Archivo_Pdf(Rutas):
 		self.leer_pdf()
 		datos_pdf_extract = list()
 		
-		for contenido in self.contenido:
+		for contenido, datos in self.contenido_pag.items():													
+			tipo_empleado = str(datos[0])
+			pagina 		  = str(datos[1])
+			ruta		  = str(datos[2])
 
 			periodo = self.extraer_periodo(contenido)
 			print(contenido)
 			patron 			= 'CONTROL: [0123456789]{8}'
 			buscador 		= Buscador(patron, contenido)
 			posiciones 		= buscador.buscar()			 			
-			texto = self.extraer_texto(posiciones[0], posiciones[1], contenido) 
+			texto			= self.extraer_texto(posiciones[0], posiciones[1], contenido) 
 
-			datos_pdf_extract = texto + "|"+ periodo
-
-			ArchivoTxt(datos_pdf_extract)
+			datos_pdf_extract = texto + "|"+ periodo + "|" + pagina + "|" + tipo_empleado + "|" + ruta + "--"
+			nombre_archivo    = "metadatos_" + tipo_empleado + ".txt"
+			ArchivoTxt(datos_pdf_extract, nombre_archivo)
 
 	def extraer_periodo(self, contenido):
 			
@@ -73,6 +77,32 @@ class Archivo_Pdf(Rutas):
 	
 
 
+	def tipo_de_empleado(self, ruta):
+		nombre_archivo = str(ruta.split("\\")[-1]).upper()
+
+		if (nombre_archivo.split("_")[0] == 'CONFIANZA' or 
+			nombre_archivo.split("_")[1] == 'CONFIANZA'
+			):
+
+			tipo_empleado = '1'
+			return tipo_empleado
+		elif (nombre_archivo.split("_")[0] == 'BASE' or 
+				nombre_archivo.split("_")[1] == 'BASE'
+			):
+
+			tipo_empleado = '2'
+			return tipo_empleado
+		
+		elif (nombre_archivo.split("_")[0] == 'BASE4' or 
+				nombre_archivo.split("_")[1] == 'BASE4'
+			):
+
+			tipo_empleado = '4'
+			return tipo_empleado
+		
+
+	
+
 
 
 
@@ -80,8 +110,13 @@ class Archivo_Pdf(Rutas):
 			
 		
 									
+	def lectura_encriptada(self, archivo, pag):
 
-	
+		archivo.decrypt('')
+		pagina = archivo.getPage(pag)
+		pdftext = pagina.extractText()
+		self.contenido.append(pdftext)
+
 		
 
 	
