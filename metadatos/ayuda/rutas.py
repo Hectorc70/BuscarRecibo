@@ -1,44 +1,101 @@
 import os
-import os.path
+from os.path import exists
+
+from tkinter.filedialog import askdirectory, askopenfilename
 
 
 
 class Rutas():
-
-    def __init__(self, ruta):
-        self.ruta_obtener_carpeta = ruta
-        self.recuperar_rutas()
-
-
-
-    def recuperar_rutas(self):
-        """Recupera las Rutas de recibos"""      
+    """Recupera rutas de una carpeta dada"""       
         
-        self.rutas_pdf = list()
-      
+
+
+    def recuperar_rutas(self, carpeta, split = False):         
+        rutas = list()        
        
+        if split:
+
+            for ruta, carpetas, archivos in os.walk(carpeta, topdown = True):          
+            
+                for archivo in archivos:
+                    
+                    ruta_full = self.ruta_completa(ruta, archivo)
+                    ruta_split = dividir_cadena('\\',ruta_full)
+                    rutas.append(ruta_split)
+        
+        elif split == False:
+            for ruta, carpetas, archivos in os.walk(carpeta, topdown = True):          
+            
+                for archivo in archivos:
+                    
+                    ruta_full = self.ruta_completa(ruta, archivo)                
+                    rutas.append(ruta_full)
+        
+        return rutas
         
 
-        for ruta, carpetas, recibos in os.walk(self.ruta_obtener_carpeta):                      
+    def recuperar_carpetas(self, carpeta_1 = False):
+        carpetas_recuperadas = list()
+
+        if carpeta_1:
+            for ruta, carpetas, archivos in os.walk(self.carpeta,topdown = True):
+                for carpeta in carpetas:
+                    ruta_full = self.ruta_completa(ruta, carpeta)                
+                    carpetas_recuperadas.append(ruta_full)
+                break    
+
+        elif carpeta_1 == False:
+            for ruta, carpetas, archivos in os.walk(self.carpeta,topdown = True):          
+            
+                for carpeta in carpetas:
+                    
+                    ruta_full = self.ruta_completa(ruta, carpeta)                
+                    carpetas_recuperadas.append(ruta_full)
+        
+        
+        return carpetas_recuperadas
+
+                    
+     
+    
+    def ruta_completa(self, ruta, archivo ):
+        """Devuelve la ruta completa. Ejemplo: entrada(ruta='C:/documents', archivo='ejemplo.txt'),
+        salida(ruta_completa='C:\\documents\\ejemplo.txt')"""
+
           
+        ruta_completa = ruta.replace('/','\\')+ "\\" + archivo
             
-            for archivo in recibos:
-            
+        return ruta_completa
 
-                extencion_archivo = os.path.splitext(archivo)
 
-                if  extencion_archivo[-1] == '.pdf':
+def dividir_cadena(separador, cadena):
 
-                    ruta_completa = ruta.replace('/','\\')+ "\\" + archivo
-                    self.rutas_pdf.append(ruta_completa)
+    cadena_split = cadena.split(separador)
 
-                    
-
-                else:
-                    print("Selecciona una carpeta con RECIBOS")
-                    self.recuperar_rutas()
-                    
+    return cadena_split
 
     
-    
+def unir_cadenas(separador, lista_datos):
+
+    cadena = separador.join(lista_datos)
+    return cadena
+
+def comprobar_rutas(ruta):
+
+    if exists(ruta):
+        return True
+    else:
+        return False
+
+
+def abrir_ruta():
+    ruta = askopenfilename() 
+
+    return ruta
+
+def abrir_directorio():
+    ruta = askdirectory()
+
+    return ruta
+   
     
