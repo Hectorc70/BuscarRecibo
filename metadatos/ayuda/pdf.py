@@ -4,7 +4,7 @@ from os.path import splitext
 from PyPDF2 import PdfFileReader
 
 
-from rutas import Rutas, unir_cadenas, comprobar_rutas
+from rutas import Rutas, unir_cadenas, comprobar_rutas, abrir_archivo, dividir_cadena
 from buscador import Buscador
 from txt import ArchivoTxt
 
@@ -34,27 +34,22 @@ class ArchivoPdfLectura():
 		self.rutas_pdf = depurar_rutas(rutas)
 		
 	
-	def escribir_pdf(self):
+
 		
 
-	def leer_pdf(self, metadatos=True):
+	def leer_pdf(self):
 		"""Lee archivo pdf"""	
 		
-		datos_hoja = list()
+		
 
 		for archivo in self.rutas_pdf:				
 			self.lectura =PdfFileReader(archivo,'rb')
 			paginas = self.lectura.numPages
 			datos =  self.extraer_contenido(paginas, self.lectura, archivo, PATRONES)
 
-			datos_hoja.append(datos)
+			return datos
 		
-		if metadatos:
-			return datos_hoja
 		
-		else: 
-			pass
-			
 	
 	def extraer_contenido(self, paginas, pdf_leido, ruta_archivo, patrones):
 		"""Retorna el contenido por hoja del Archivo PDF,
@@ -96,62 +91,15 @@ class ArchivoPdfLectura():
 			texto.append(texto_encontrado)
 		
 		return texto
-
-	def escribir_datos()
-		ruta_txt = 'C\\RECIBOS_METADOS\\metadatos.txt'
-		comprobar_ruta = comprobar_rutas(ruta_txt)
-		
-
-		if comprobar_ruta:
-			continue
-		else:
-			pedir
-		
-		txt = ArchivoTxt(ruta_txt)
-		
-
-		
-		contenido_txt = txt.leer()
-
-		for linea in contenido_txt:
-			recibos_empleado = linea.split('|')
-			control 		 = linea.split('|')[0]
-
-
-	
-
-	
-	def comprobar_empleado(self):
-		datos_pdf = self.leer_pdf()
-
-		for dato_pdf in datos_pdf:
-
-
-
-	
-	
-
 	
 
 
-	
-
-
-
-
-
-			
 			
 		
 									
 	def lectura_encriptada(self, archivo, pag):
-
-		archivo.decrypt('')
-		pagina = archivo.getPage(pag)
-		pdftext = pagina.extractText()
-		self.contenido.append(pdftext)
+		pass
 
 
 
-pdf = ArchivoPdfLectura(askdirectory())
-pdf.leer_pdf()
+

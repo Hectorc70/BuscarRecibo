@@ -26,7 +26,7 @@ class ArchivoTxt:
 		
 		print("leido y escrita la INFO")
 
-	def leer(self, datos, lineas = True):
+	def leer(self, lineas = True):
 
 		if lineas:
 			archivo_r = open(self.ruta_archivo, "r")

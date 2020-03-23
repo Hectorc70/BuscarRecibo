@@ -88,7 +88,7 @@ def comprobar_rutas(ruta):
         return False
 
 
-def abrir_ruta():
+def abrir_archivo():
     ruta = askopenfilename() 
 
     return ruta
