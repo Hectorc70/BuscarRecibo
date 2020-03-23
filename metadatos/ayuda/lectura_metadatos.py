@@ -1,5 +1,5 @@
-from txt import ArchivoTxt
-from rutas import dividir_cadena
+from ayuda.txt import ArchivoTxt
+from ayuda.rutas import dividir_cadena
 
 
 class ArchivoMetadatos(ArchivoTxt):
@@ -32,7 +32,7 @@ class ArchivoMetadatos(ArchivoTxt):
 		self.periodo = dict()
 
 		for recibo in periodos_datos:
-			if recibo == '\n':
+			if recibo == '\n' or recibo == '':
 				continue
 
 			recibos = dividir_cadena('-', recibo)

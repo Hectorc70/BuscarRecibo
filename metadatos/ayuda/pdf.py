@@ -1,12 +1,12 @@
-from tkinter.filedialog import askdirectory
+
 from os.path import splitext
 
 from PyPDF2 import PdfFileReader
 
 
-from rutas import Rutas, unir_cadenas, comprobar_rutas, abrir_archivo, dividir_cadena
-from buscador import Buscador
-from txt import ArchivoTxt
+from ayuda.rutas import Rutas, unir_cadenas, comprobar_rutas, abrir_archivo, dividir_cadena
+from ayuda.buscador import Buscador
+from ayuda.txt import ArchivoTxt
 
 
 PATRONES = ['CONTROL: [0123456789]{8}', 'PERIODO:[0123456789]{2}/[0123456789]{4}']
