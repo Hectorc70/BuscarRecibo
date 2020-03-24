@@ -4,25 +4,33 @@ from os.path import splitext
 from PyPDF2 import PdfFileReader
 
 
-from ayuda.rutas import Rutas, unir_cadenas, comprobar_rutas, abrir_archivo, dividir_cadena
-from ayuda.buscador import Buscador
-from ayuda.txt import ArchivoTxt
+from metadatos.ayuda.rutas import Rutas, unir_cadenas, comprobar_rutas, abrir_archivo, dividir_cadena
+from metadatos.ayuda.buscador import Buscador
+from metadatos.ayuda.txt import ArchivoTxt
 
 
 PATRONES = ['CONTROL: [0123456789]{8}', 'PERIODO:[0123456789]{2}/[0123456789]{4}']
+PERIODOS = ['01','02','03','04','05','06','07','08','09','10','11',
+            '12','13','14','15','16','17','18','19','20','21','22','23','24'
+			]
 
 def depurar_rutas(ruta_archivo_pdf):
 	rutas_pdf = list()
-
 	rutas = Rutas()
 	rutas = rutas.recuperar_rutas(ruta_archivo_pdf, True)
+	ruta_base_num = len(ruta_archivo_pdf.split('\\'))
 	
-	for ruta in rutas:
-		tipo_archivo = splitext(ruta[-1])[-1]
 
+	for ruta in rutas:
+
+		tipo_archivo = splitext(ruta[-1])[-1]
 		if tipo_archivo == '.pdf':
-			ruta_completa = unir_cadenas('\\', ruta)
-			rutas_pdf.append(ruta_completa)
+			per = ruta[ruta_base_num].split('_')[0]
+			carp_reci = ruta[ruta_base_num+3]
+
+			if per in PERIODOS and carp_reci == 'RECIBOS':		
+				ruta_completa = unir_cadenas('\\', ruta)
+				rutas_pdf.append(ruta_completa)
 	
 	return rutas_pdf
 
@@ -38,16 +46,17 @@ class ArchivoPdfLectura():
 		
 
 	def leer_pdf(self):
-		"""Lee archivo pdf"""	
-		
-		
+		"""Lee archivo pdf"""		
+		datos_recibos = list()
 
 		for archivo in self.rutas_pdf:				
 			self.lectura =PdfFileReader(archivo,'rb')
 			paginas = self.lectura.numPages
 			datos =  self.extraer_contenido(paginas, self.lectura, archivo, PATRONES)
-
-			return datos
+			
+			datos_recibos.append(datos)
+		
+		return datos_recibos
 		
 		
 	
@@ -83,12 +92,20 @@ class ArchivoPdfLectura():
 		texto = list()
 	
 		for patron in patrones:
-
+			
+				
 			buscador 		 = Buscador(patron, contenido_pdf)
-			posiciones 		 = buscador.buscar()			 			
+			posiciones 		 = buscador.buscar()
+
+			if len(posiciones) < 2:
+				buscador 		 = Buscador('PERIODO:[0123456789]{1}/[0123456789]{4}', contenido_pdf)
+				posiciones 		 = buscador.buscar()		 			
+			
 			texto_encontrado = self.extraer_texto(posiciones[0], posiciones[1], contenido_pdf)
 
 			texto.append(texto_encontrado)
+				
+			
 		
 		return texto
 	
