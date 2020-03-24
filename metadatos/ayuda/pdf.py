@@ -38,16 +38,17 @@ class ArchivoPdfLectura():
 		
 
 	def leer_pdf(self):
-		"""Lee archivo pdf"""	
-		
-		
+		"""Lee archivo pdf"""		
+		datos_recibos = list()
 
 		for archivo in self.rutas_pdf:				
 			self.lectura =PdfFileReader(archivo,'rb')
 			paginas = self.lectura.numPages
 			datos =  self.extraer_contenido(paginas, self.lectura, archivo, PATRONES)
-
-			return datos
+			
+			datos_recibos.append(datos)
+		
+		return datos_recibos
 		
 		
 	
