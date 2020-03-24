@@ -1,11 +1,35 @@
-from tkinter.filedialog import askdirectory
+from ui import *
+
+from metadatos.escritura import EscrituraMetadatos
 
 
-from metadatos.crear_metadatos import Archivo_Pdf
 
 
-def ejecutar(ruta):
-    pdf = Archivo_Pdf(ruta)
-    pdf.crear_metadatos()
 
-ejecutar(askdirectory())
+class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
+
+    def __init__(self, *args, **kwargs):   
+        QtWidgets.QMainWindow.__init__(self, *args, **kwargs)
+        self.setupUi(self)
+        self.ejecutar()
+        
+
+        
+
+    def ejecutar(self):
+        self.boton_start_2.clicked.connect(self.ejecutar_creacion_metadatos)
+
+
+    def ejecutar_creacion_metadatos(self):
+        ruta_carpeta = self.carpeta_input.text()
+
+        metadatos = EscrituraMetadatos(ruta_carpeta)
+        metadatos.comparacion()
+
+
+
+if __name__ == "__main__":
+    app = QtWidgets.QApplication([])
+    window = MainWindow()
+    window.show()
+    app.exec_()
