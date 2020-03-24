@@ -53,7 +53,8 @@ class ArchivoPdfLectura():
 			self.lectura =PdfFileReader(archivo,'rb')
 			paginas = self.lectura.numPages
 			datos =  self.extraer_contenido(paginas, self.lectura, archivo, PATRONES)
-			
+			if len(datos) == 0:
+				continue
 			datos_recibos.append(datos)
 		
 		return datos_recibos
@@ -78,7 +79,8 @@ class ArchivoPdfLectura():
 				pag = pagina+1
 
 				buscar = self.buscar_texto(patrones, pdf_texto)
-				
+				if len(buscar) == 0:
+					continue
 				datos_pag[buscar[0]] = 	[pag, buscar[1], ruta_archivo]
 		
 		return datos_pag
@@ -99,9 +101,16 @@ class ArchivoPdfLectura():
 
 			if len(posiciones) < 2:
 				buscador 		 = Buscador('PERIODO:[0123456789]{1}/[0123456789]{4}', contenido_pdf)
-				posiciones 		 = buscador.buscar()		 			
+				posiciones 		 = buscador.buscar()
+				
+				if len(posiciones) < 2:
+					continue
+					
 			
 			texto_encontrado = self.extraer_texto(posiciones[0], posiciones[1], contenido_pdf)
+			
+				
+			
 
 			texto.append(texto_encontrado)
 				

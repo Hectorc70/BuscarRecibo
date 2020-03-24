@@ -24,6 +24,6 @@ class Buscador:
             self.posiciones.append(buscador.span())            
             return buscador.span()
         else:
-            print("No se ha encontrado la palabra:", self.palabra)
+            print("No se ha encontrado la palabra:", self.texto)
     
         return self.posiciones
