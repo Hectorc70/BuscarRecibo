@@ -1,27 +1,6 @@
-"""
-
-
-
-from extractor.buscador_recibo import Recibo
-
-
-def ejecutar(ruta):
-    pdf = Archivo_Pdf(ruta)
-    pdf.extraer_no_control()
-
-def extraer_recibo():
-    reci = Recibo("300596", "01", "2")
-    reci.leer_archivo()
-extraer_recibo()
-#ejecutar(askdirectory())
-
-
-
-"""
-
 from ui import *
 
-from metadatos.crear_metadatos import Archivo_Pdf
+from metadatos.escritura import EscrituraMetadatos
 
 
 
@@ -44,8 +23,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def ejecutar_creacion_metadatos(self):
         ruta_carpeta = self.carpeta_input.text()
 
-        pdf = Archivo_Pdf(ruta_carpeta)
-        pdf.extraer_no_control()
+        metadatos = EscrituraMetadatos(ruta_carpeta)
+        metadatos.comparacion()
 
 
 
