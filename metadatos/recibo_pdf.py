@@ -14,6 +14,7 @@ PERIODOS = ['1','2','3','4','5','6','7','8','9','10','11',
 
 class ReciboPDF:
 
+
     def __init__(self, control,ruta_destino, periodos, annos):
         """Recupera Recibos en pdf de empleados"""
         self.control      = control
@@ -21,25 +22,115 @@ class ReciboPDF:
         self.periodo_ini  = periodos[0]
         self.periodo_fin  = periodos[1]
         self.annos        = annos
-    
-       
 
-    def armar_clave_input(self):
-        periodos_iniciales = self.armar_periodos(self.annos[0], self.periodo_ini, 25)
-        periodos_finales = self.armar_periodos(self.annos[1], 1, int(self.periodo_fin))                                         
-       
-        empleados  = self.datos_empleado()
-        for anno in self.annos:
-            for periodo in range(int(self.periodo_ini), int(self.periodo_fin)+1):
-            
-                clave = self.control + '|' + str(periodo)+ '|' + anno + '|'
+        self.armar_per  = ArmarPeriodos()
+    
+    def comparacion(self):
+        datos_input = self.armar_clave_input()
+        metadatos   = self.datos_empleado()
+
+        for periodo_input in datos_input.keys():
+            if periodo_input in metadatos.keys():
+                datos = metadatos[periodo_input]
+                datos_div = dividir_cadena('|', datos)               
+                ruta = datos_div[0].strip('\n')
+
+                pagina = datos_div[1]
+
+
+                self.extraer_hoja(ruta, pagina )
+            else:
+                pass
+        print("Terminado")
+        
+
+    
+    def extraer_hoja(self, ruta, pagina):
 
         
 
+        pdf_original =PdfFileReader(ruta,'rb')
+        pdf_nuevo = PdfFileWriter()
+        pdf_nuevo.addPage(pdf_original.getPage(int(pagina)))
+        
+        self.guardar_archivo(self.ruta_destino, pdf_nuevo)
+
+
+    def guardar_archivo(self, ruta, pdf):  
+        nombre_archivo = ruta + '\\'+ "prueba.pdf"
+        with open(nombre_archivo,'wb') as fp: 
+            pdf.write(fp)
+
+        
+
+
+    def armar_clave_input(self):
+
+        periodos_intermedios = None        
+        todos_los_periodos = list()
+        
+
+        if self.annos[0] != self.annos[1] and self.annos[0]+1 != self.annos[1]:
+            periodos_intermedios = self.recuperar_periodos_intermedios()
+        
+        elif self.annos[0] == self.annos[1]:
+
+            periodos= self.armar_per.armar_periodos(self.annos[0], self.periodo_ini,
+                                                    int(self.periodo_fin)+1
+                                                    )
+            todos_los_periodos.append(periodos)        
+        else:                                           
+            periodos_iniciales = self.armar_per.armar_periodos(self.annos[0], 
+                                                                self.periodo_ini,25
+                                                                )
+            periodos_finales   = self.armar_per.armar_periodos(self.annos[1], 1, 
+                                                                int(self.periodo_fin)+1
+                                                                )
+            todos_los_periodos.append(periodos_iniciales)
+            todos_los_periodos.append(periodos_finales)
+        
+        
+        if periodos_intermedios != None: 
             
+            for periodos in periodos_intermedios:
+
+                todos_los_periodos.append(periodos)
+           
+            
+
+            
+        control = None
+        datos_empleado_input = dict()
+        for anno in todos_los_periodos:
+            for anno_clave, periodos in anno.items():
+                for periodo in periodos:
+                    if type(self.control) == int:
+                        pass
+                    else:
+                        control = int(self.control)
+                    clave = str(control) + '|' + str(periodo)+ '|' + str(anno_clave)
+
+                    datos_empleado_input[clave] = ' '
+        
+        return datos_empleado_input
+        
+
+    def recuperar_periodos_intermedios(self):
+        """Retorna los periodos de los años intermedios"""
+
+        annoos_intermedios = self.armar_per.armar_years(self.annos)
+        periodos_intermedios = list()
+
+        for anno_inter in annoos_intermedios:
+            intermedios = self.armar_per.armar_periodos(anno_inter, 1,25)
+
+            periodos_intermedios.append(intermedios)
+
+        return periodos_intermedios         
 
         
     def datos_empleado(self):
+        
         archivo_mtd = ArchivoMetadatos('C:\\RECIBOS_METADATOS\\metadatos.txt')
         empleados = archivo_mtd.leer()
 
@@ -58,44 +149,50 @@ class ReciboPDF:
             datos_empleado_format[clave] = ruta + '|' + pagina
 
         return datos_empleado_format
-            
-
-            
-
+    
+    
 
 
 
 
 
 
+class ArmarPeriodos():
+
+    def __init__(self):
+        pass
+
+    def armar_years(self, datos):
+        """Retorna los años intermedios
+            entre el año de inicio y el año final"""
 
 
-    def extraer_hoja(self):
+        annos_intermedios = list()
 
-        ruta_pdf = self.datos_pdf[0]
-        pagina   = self.datos_pdf[1]
+        inicio = datos[0]
+        fin    = datos[1]
 
-        pdf_original =PdfFileReader(ruta_pdf,'rb')
-        pdf_nuevo = PdfFileWriter()
-        pdf_nuevo.addPage(pdf_original.getPage(pagina))
+        intermedio = inicio
+
+        while intermedio != fin:
+            intermedio = intermedio+1
+            if intermedio == fin:
+                break
+
+            annos_intermedios.append(intermedio)
+
         
-        self.guardar_archivo(self.ruta_destino, pdf_nuevo)
-
-
-
-    def guardar_archivo(self, nombre, pdf):
-        nombre_archivo = ""
-        #ruta_pdf_nuevo = ruta + 'new'
-
-        pdf.write(ruta)
-
+        
+        
+        
+        return annos_intermedios
 
     def armar_periodos(self, anno, periodo_i, periodo_f):        
-        periodos_año = dict()
+        periodos_anno = dict()
         periodos = list()
         
-        #PERIODOS INICIALES
-        for per in range(int(periodo_i), periodo_f):
+        
+        for per in range(int(periodo_i), int(periodo_f)):
             
             if per == 23:
                 periodos.append(str(per)+'-AGUI')
@@ -103,6 +200,11 @@ class ReciboPDF:
             periodos.append(per)
 
 
-        periodos_año[anno]= periodos
+        periodos_anno[anno]= periodos
 
-        return periodos_año
+        return periodos_anno
+
+    
+        
+
+
