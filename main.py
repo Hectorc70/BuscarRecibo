@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QDialog, QMessageBox
 from PyQt5.QtCore import QThread
 
 from metadatos.escritura import EscrituraMetadatos
+from metadatos.recibo_pdf import ReciboPDF
 from ui import *
 
 
@@ -15,6 +16,22 @@ class EscribirMdatos(QThread):
 		metadatos = EscrituraMetadatos(self.ruta )
 		metadatos.comparacion()
 
+class BuscarRecibo(QThread):
+	def __init__(self, control, ruta_destino, periodos, annos):
+		super().__init__()
+		self.control = control
+		self.ruta_destino = ruta_destino
+		self.periodos = periodos
+		self.annos = annos
+
+
+	def run(self):		
+		recibos = ReciboPDF(self.control, self.ruta_destino,
+							self.periodos, self.annos
+							)
+		recibos.buscar_control()
+
+
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
@@ -27,21 +44,42 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 		
 
 	def ejecutar(self):
-		self.boton_start_2.clicked.connect(self.ejecutar_creacion_metadatos)
+		self.boton_start_mt.clicked.connect(self.ejecutar_creacion_metadatos)
+		self.boton_start.clicked.connect(self.ejecutar_busqueda_recibos)
 
 
 	def ejecutar_creacion_metadatos(self):
 		ruta_carpeta = self.carpeta_input.text()
 
 		self.escribir_mt = EscribirMdatos(ruta_carpeta)		
-		self.escribir_mt.finished.connect(self.eliminar_hilo)
+		self.escribir_mt.finished.connect(self.eliminar_hilo_ecribir)
 		self.escribir_mt.start()
 		
+	
+	def ejecutar_busqueda_recibos(self):		
+		periodo_ini = self.periodo_inicial.text()
+		periodo_fin = self.periodo_final.text()
+		anno_ini    = self.sb_a_ini.value()
+		anno_fin    = self.sb_a_fin.value()
+
+		control     = self.control_input.text()
+		periodos    = [periodo_ini, periodo_fin]
+		annos       = [anno_ini, anno_fin]
+		ruta_salida = self.ruta_destino_input.text()
+
+		recibos = ReciboPDF(control, ruta_salida,
+							periodos, annos
+							)
+		recibos.armar_periodos()
+
 
 		
-	def eliminar_hilo(self):
-		print("Terminada la escritura de metadatos")
+	def eliminar_hilo_ecribir(self):
+		print("---EJECUCION TERMINADA----")
 		del self.escribir_mt
+	def eliminar_hilo_buscar(self):
+		print("---EJECUCION TERMINADA----")
+		del self.buscar_reci
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication([])
