@@ -20,7 +20,7 @@ class ArchivoTxt:
 	def escribir(self, datos):
 		
 		archivo_r = open(self.ruta_archivo, "a")
-		archivo_r.write('\n' + datos)
+		archivo_r.write(datos + '\n'  )
 		
 		archivo_r.close() 
 		
