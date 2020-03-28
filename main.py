@@ -57,20 +57,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 		
 	
 	def ejecutar_busqueda_recibos(self):		
-		periodo_ini = self.periodo_inicial.text()
-		periodo_fin = self.periodo_final.text()
-		anno_ini    = self.sb_a_ini.value()
+		periodo_ini = int(self.periodo_inicial.text())
+		periodo_fin = int(self.periodo_final.text())
+		anno_ini    = (self.sb_a_ini.value())
 		anno_fin    = self.sb_a_fin.value()
 
 		control     = self.control_input.text()
-		periodos    = [periodo_ini, periodo_fin]
+		periodos    = [str(periodo_ini), str(periodo_fin)]
 		annos       = [anno_ini, anno_fin]
 		ruta_salida = self.ruta_destino_input.text()
 
 		recibos = ReciboPDF(control, ruta_salida,
 							periodos, annos
 							)
-		recibos.armar_periodos()
+		recibos.comparacion()
 
 
 		
