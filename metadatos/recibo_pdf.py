@@ -38,28 +38,31 @@ class ReciboPDF:
                 pagina = datos_div[1]
 
 
-                self.extraer_hoja(ruta, pagina )
+                self.extraer_hoja(ruta, pagina, periodo_input)
             else:
                 pass
         print("Terminado")
         
 
     
-    def extraer_hoja(self, ruta, pagina):
+    def extraer_hoja(self, ruta, pagina, nombre):
 
         
 
         pdf_original =PdfFileReader(ruta,'rb')
         pdf_nuevo = PdfFileWriter()
-        pdf_nuevo.addPage(pdf_original.getPage(int(pagina)))
+        pdf_nuevo.addPage(pdf_original.getPage(int(pagina)-1))
         
-        self.guardar_archivo(self.ruta_destino, pdf_nuevo)
+        
+        self.guardar_archivo(nombre, self.ruta_destino, pdf_nuevo)
 
 
-    def guardar_archivo(self, ruta, pdf):  
-        nombre_archivo = ruta + '\\'+ "prueba.pdf"
-        with open(nombre_archivo,'wb') as fp: 
-            pdf.write(fp)
+    def guardar_archivo(self, nombre, ruta, pdf): 
+        nombre =dividir_cadena('|', nombre)
+        nombre_archivo = nombre[0] + '_' + nombre[2] + nombre[1]
+        nombre_archivo = ruta + '\\'+ nombre_archivo + ".pdf"
+        with open(nombre_archivo,'wb') as pdf_nombre: 
+            pdf.write(pdf_nombre)
 
         
 
