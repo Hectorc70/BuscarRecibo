@@ -41,6 +41,7 @@ class ReciboPDF:
                 self.extraer_hoja(ruta, pagina )
             else:
                 pass
+        print("Terminado")
         
 
     
@@ -98,12 +99,15 @@ class ReciboPDF:
             
 
             
-        
+        control = None
         datos_empleado_input = dict()
         for anno in todos_los_periodos:
             for anno_clave, periodos in anno.items():
                 for periodo in periodos:
-                    control = int(self.control)
+                    if type(self.control) == int:
+                        pass
+                    else:
+                        control = int(self.control)
                     clave = str(control) + '|' + str(periodo)+ '|' + str(anno_clave)
 
                     datos_empleado_input[clave] = ' '
