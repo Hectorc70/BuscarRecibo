@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from PyQt5.QtWidgets import QDialog, QMessageBox
 from PyQt5.QtCore import QThread
 
@@ -30,6 +31,11 @@ class BuscarRecibo(QThread):
 							self.periodos, self.annos
 							)
 		recibos.buscar_control()
+=======
+from ui import *
+
+from metadatos.escritura import EscrituraMetadatos
+>>>>>>> master
 
 
 
@@ -67,10 +73,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 		annos       = [anno_ini, anno_fin]
 		ruta_salida = self.ruta_destino_input.text()
 
+<<<<<<< HEAD
 		recibos = ReciboPDF(control, ruta_salida,
 							periodos, annos
 							)
 		recibos.comparacion()
+=======
+        metadatos = EscrituraMetadatos(ruta_carpeta)
+        metadatos.comparacion()
+>>>>>>> master
 
 
 		

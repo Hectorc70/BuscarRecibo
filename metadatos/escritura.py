@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 from metadatos.ayuda.pdf import ArchivoPdfLectura
 from metadatos.ayuda.lectura_metadatos import ArchivoMetadatos
 from metadatos.ayuda.txt import ArchivoTxt
+=======
+from ayuda.pdf import ArchivoPdfLectura
+from ayuda.lectura_metadatos import ArchivoMetadatos
+from ayuda.txt import ArchivoTxt
+>>>>>>> master
 
 class EscrituraMetadatos:
 

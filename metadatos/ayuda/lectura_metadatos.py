@@ -16,8 +16,11 @@ class ArchivoMetadatos(ArchivoTxt):
 
 		for linea in contenido_txt:									
 			linea_div = dividir_cadena('|', linea)
+<<<<<<< HEAD
 			if linea_div == '':
 				continue
+=======
+>>>>>>> master
 			if linea_div[-1] == '\n':
 				linea_div.pop(-1)
 					
