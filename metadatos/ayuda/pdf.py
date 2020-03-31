@@ -53,8 +53,12 @@ class ArchivoPdfLectura():
 			self.lectura =PdfFileReader(archivo,'rb')
 			paginas = self.lectura.numPages
 			datos =  self.extraer_contenido(paginas, self.lectura, archivo, PATRONES)
+<<<<<<< HEAD
 			if len(datos) == 0:
 				continue
+=======
+			
+>>>>>>> master
 			datos_recibos.append(datos)
 		
 		return datos_recibos

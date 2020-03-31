@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 __pycahe__/
 *.pyc/
 =======
@@ -127,3 +128,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 >>>>>>> Desarrollo
+=======
+__pycahe__/
+*.pyc/
+>>>>>>> master
