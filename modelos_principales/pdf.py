@@ -48,6 +48,3 @@ class ArchivoPDF:
 class ArchivoPDFEncrip(ArchivoPDF):
 	pass
 
-ruta = 'X:\\CFDI_NOMINA_2019\\01_2019\\ORDINARIA\\PDF\\RECIBOS\\Funcionarios_Cheques_201901.pdf'
-pdf = ArchivoPDF(ruta)
-pdf.extraer_contenido()

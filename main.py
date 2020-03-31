@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import QDialog, QMessageBox
 from PyQt5.QtCore import QThread
 
-from metadatos.escritura import EscrituraMetadatos
-from metadatos.recibo_pdf import ReciboPDF
+from almacenar.recibos import ReciboPDF
+#from metadatos.recibo_pdf import ReciboPDF
 from ui import *
 
 
@@ -13,8 +13,8 @@ class EscribirMdatos(QThread):
 
 
 	def run(self):		
-		metadatos = EscrituraMetadatos(self.ruta )
-		metadatos.comparacion()
+		metadatos = ReciboPDF(self.ruta)
+		metadatos.retornar_datos()
 
 class BuscarRecibo(QThread):
 	def __init__(self, control, ruta_destino, periodos, annos):
